@@ -28,7 +28,7 @@ def get_predictor(args):
                            
                            overrides="")
 
-    # Otherwise, use the mapping
+
     model_type = archive.config.get("model").get("type")
     if model_type != 'srl':
         raise Exception('the given model is not for srl.')
@@ -45,8 +45,7 @@ def run(predictor,
     def _run_predictor(batch_data):
         if len(batch_data) == 1:
             result = predictor.predict_json(batch_data[0])
-            # Batch results return a list of json objects, so in
-            # order to iterate over the result below we wrap this in a list.
+            
             results = [result]
         else:
             results = predictor.predict_batch_json(batch_data)
@@ -80,11 +79,11 @@ def main():
     predictor = get_predictor(args)
     output_file = None
     print_to_console = False
-    # ExitStack allows us to conditionally context-manage `output_file`, which may or may not exist
+
     with ExitStack() as stack:
-        input_file = stack.enter_context(args.input_file)  # type: ignore
+        input_file = stack.enter_context(args.input_file)  
         if args.output_file:
-            output_file = stack.enter_context(args.output_file)  # type: ignore
+            output_file = stack.enter_context(args.output_file)  
 
         if not args.output_file:
             print_to_console = True
