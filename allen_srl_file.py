@@ -1,3 +1,6 @@
+'''Usage
+python allen_srl_file.py https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz examples.json'''
+
 from allennlp.predictors import Predictor
 from allennlp.models.archival import load_archive
 from contextlib import ExitStack
@@ -13,7 +16,7 @@ def get_arguments():
 
     parser.add_argument('--batch-size', type=int, default=1, help='The batch size to use for processing')
 
-    parser.add_argument('--cuda-device', type=int, default=-1, help='id of GPU to use (if any)')
+
 
     args = parser.parse_args()
 
@@ -22,7 +25,7 @@ def get_arguments():
 def get_predictor(args):
     archive = load_archive(args.archive_file,
                            weights_file=None,
-                           cuda_device=args.cuda_device,
+                           
                            overrides="")
 
     # Otherwise, use the mapping
@@ -36,8 +39,8 @@ def run(predictor,
         input_file,
         output_file,
         batch_size,
-        print_to_console,
-        cuda_device):
+        print_to_console
+        ):
 
     def _run_predictor(batch_data):
         if len(batch_data) == 1:
@@ -46,7 +49,7 @@ def run(predictor,
             # order to iterate over the result below we wrap this in a list.
             results = [result]
         else:
-            results = predictor.predict_batch_json(batch_data, cuda_device)
+            results = predictor.predict_batch_json(batch_data)
 
         for model_input, output in zip(batch_data, results):
             string_output = predictor.dump_line(output)
@@ -90,8 +93,8 @@ def main():
             input_file,
             output_file,
             args.batch_size,
-            print_to_console,
-            args.cuda_device)
+            print_to_console
+            )
 
 if __name__ == '__main__':
     main()
