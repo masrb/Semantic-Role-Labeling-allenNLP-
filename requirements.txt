@@ -1,0 +1,2 @@
+allennlp==0.8.1
+dpath==1.4.2
